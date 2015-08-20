@@ -5,9 +5,9 @@ import sys
 import random
 import argparse
 
-PUNC_LIST = (u'\uff0c', u'\u3002') # 逗号和句号
-WORDS_PER_SENTENCE = (5, 15)       # 每句词语数
-SENTENCE_PER_PARAGRAPH = (3, 10)   # 每段落句数
+PUNC_LIST = (u'\uff0c', u'\u3002')  # 逗号和句号
+WORDS_PER_SENTENCE = (5, 15)  # 每句词语数
+SENTENCE_PER_PARAGRAPH = (3, 10)  # 每段落句数
 
 
 class BaseLorem(object):
@@ -27,7 +27,7 @@ class BaseLorem(object):
         for i in range(number):
             sentence += self.gen_word()
         return sentence
-    
+
     def gen_paragraph(self):
         number = random.choice(range(SENTENCE_PER_PARAGRAPH[0],
                                      SENTENCE_PER_PARAGRAPH[1]))
@@ -37,18 +37,18 @@ class BaseLorem(object):
         paragraph = paragraph[:-1] + PUNC_LIST[1]
         return paragraph
 
-        
+
 class MeaningLorem(BaseLorem):
     def __init__(self):
         BaseLorem.__init__(self)
         with open('word.txt') as words:
-            all_words = words.read().decode('utf-8')
+            all_words = words.read()
             self.character_list = list(set(list(all_words.replace('\n', ''))))
             self.word_list = all_words.split('\n')[:-1]
-            
+
     def gen_character(self):
         return random.choice(self.character_list)
-            
+
     def gen_word(self):
         return random.choice(self.word_list)
 
@@ -56,10 +56,10 @@ class MeaningLorem(BaseLorem):
 class GabbleLorem(BaseLorem):
     def __init__(self):
         BaseLorem.__init__(self)
-        self.character_list = xrange(0x4e00, 0x9fa5)
+        self.character_list = range(0x4e00, 0x9fa5)
 
     def gen_character(self):
-        return unichr(random.choice(self.character_list))
+        return str(random.choice(self.character_list))
 
     def gen_word(self):
         number = random.choice([2, 3, 4])
@@ -75,7 +75,8 @@ if __name__ == '__main__':
         for i in range(number):
             result.append(func())
         return '\n'.join(result)
-        
+
+
     def main():
         parser = argparse.ArgumentParser(description='A chinese lorem ipsum generator.')
         parser.add_argument('-z', dest='meaning', type=int,
@@ -100,11 +101,10 @@ if __name__ == '__main__':
         }
 
         if args.gentype in print_dict:
-            print print_dict[args.gentype]
+            print(print_dict[args.gentype])
         else:
-            print parser.print_help()
+            print(parser.print_help())
             sys.exit(1)
 
-    main()
 
-        
+    main()

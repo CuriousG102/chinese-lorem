@@ -35,6 +35,7 @@ class BaseLorem(object):
 class MeaningLorem(BaseLorem):
     def __init__(self):
         BaseLorem.__init__(self)
+        # TODO: Cache the results of this operation because it is very expensive
         with open('word.txt') as words:
             all_words = words.read()
             self.character_list = list(set(list(all_words.replace('\n', ''))))
@@ -63,7 +64,26 @@ class GabbleLorem(BaseLorem):
         return word
 
 
+def _get_content(number, generator_method, isMeaning, separator):
+    if isMeaning:
+        lorem = MeaningLorem()
+    else:
+        lorem = GabbleLorem()
+    generator_method = getattr(lorem, generator_method)
+    return separator.join([generator_method() for i in range(number)])
+
+
+def get_sentences(number, isMeaning=True):
+    sentences = _get_content(number, 'gen_sentence', isMeaning, PUNC_LIST[0])
+    return sentences[:-1] + PUNC_LIST[1]
+
+
+def get_paragraphs(number, isMeaning=True):
+    return _get_content(number, 'gen_paragraph', isMeaning, '\n')
+
+
 if __name__ == '__main__':
+
     def print_out(func, number):
         result = []
         for i in range(number):

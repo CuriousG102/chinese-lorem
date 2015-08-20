@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import random
 import argparse
+
+import random
 
 PUNC_LIST = (u'\uff0c', u'\u3002')  # 逗号和句号
 WORDS_PER_SENTENCE = (5, 15)  # 每句词语数
@@ -21,21 +22,14 @@ class BaseLorem(object):
         pass
 
     def gen_sentence(self):
-        number = random.choice(range(WORDS_PER_SENTENCE[0],
-                                     WORDS_PER_SENTENCE[1]))
-        sentence = ''
-        for i in range(number):
-            sentence += self.gen_word()
-        return sentence
+        number = random.randrange(*WORDS_PER_SENTENCE)
+        return ''.join([self.gen_word() for i in range(number)])
 
     def gen_paragraph(self):
-        number = random.choice(range(SENTENCE_PER_PARAGRAPH[0],
-                                     SENTENCE_PER_PARAGRAPH[1]))
-        paragraph = ''
-        for i in range(number):
-            paragraph += self.gen_sentence() + PUNC_LIST[0]
-        paragraph = paragraph[:-1] + PUNC_LIST[1]
-        return paragraph
+        number = random.randrange(*SENTENCE_PER_PARAGRAPH)
+        paragraph = [self.gen_sentence() + PUNC_LIST[0] for i in range(number)]
+        paragraph[-1] = paragraph[-1][:-1] + PUNC_LIST[1]
+        return ''.join(paragraph)
 
 
 class MeaningLorem(BaseLorem):

@@ -58,10 +58,7 @@ class GabbleLorem(BaseLorem):
 
     def gen_word(self):
         number = random.choice([2, 3, 4])
-        word = ''
-        for i in range(number):
-            word += self.gen_character()
-        return word
+        return ''.join([self.gen_character() for i in range(number)])
 
 
 def _get_content(number, generator_method, isMeaning, separator):

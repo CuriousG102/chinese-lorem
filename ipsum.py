@@ -54,7 +54,7 @@ class GabbleLorem(BaseLorem):
         self.character_list = range(0x4e00, 0x9fa5)
 
     def gen_character(self):
-        return str(random.choice(self.character_list))
+        return chr(random.choice(self.character_list))
 
     def gen_word(self):
         number = random.choice([2, 3, 4])
